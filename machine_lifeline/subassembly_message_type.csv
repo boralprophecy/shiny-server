@@ -9,3 +9,4 @@ genericmotor,"ac1,bp1,mg1,ir1,mg1",Warning
 machinebody,"ac1,bp1,mg1,ir1,mg1",Warning
 gearbox,"ac1,bp1,mg1,ir1,mg1",Warning
 energysense,pf1,Error
+motorsense,pf1,Error

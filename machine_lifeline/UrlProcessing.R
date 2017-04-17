@@ -143,7 +143,15 @@ Sensor_Presence_DF = function( company_machine_last_json_url ){
     
     if( ( current_sensors_found == 'No sensors found' )|( current_sensors_found == 'No Subassembly Instances found' ) ){
       
-      sensor_matching_df[[ row_index ]] = data.frame( 'Possible_Sensors' = effective_possible_sensors, 'Comment' = 'Error' )
+      if( current_sensors_found == 'No Subassembly Instances found' ){
+        
+        sensor_matching_df[[ row_index ]] = data.frame( 'Possible_Sensors' = current_sensors_found, 'Comment' = 'Error' )
+        
+      } else{
+        
+        sensor_matching_df[[ row_index ]] = data.frame( 'Possible_Sensors' = effective_possible_sensors, 'Comment' = 'Error' )
+        
+      }
       
     } else{
       
