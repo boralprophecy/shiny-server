@@ -8,35 +8,7 @@ dataInput = reactive({
   
   company_machine_combined_names = Particular_Date_Company_Machine_Names( date_to_check )
   
-  company_machine_last_json_url = sapply( company_machine_combined_names, function( company_machine_names ){
-    
-    company_machine_last_json_url_output = sapply( company_machine_names, function( current_company_machine_name ){
-      
-      company_machine_info = unlist( strsplit( current_company_machine_name, ';' ) )
-      
-      current_company = company_machine_info[1]  ;  current_machine_name = company_machine_info[2]
-      
-      server_url = 'http://54.162.246.37/log-V2/'
-      
-      url_creation = paste0( server_url, date_to_check, '/', current_company, '/', current_machine_name, '/' )   #...... url creation
-      
-      to_get_json_list = getHTMLLinks( url_creation )
-      
-      json_file_indexes = grep( '.json', to_get_json_list ) ; r_output_json_file_indexes = grep( '_routput', to_get_json_list )
-      
-      r_output_json_file_names = to_get_json_list[ intersect( json_file_indexes, r_output_json_file_indexes ) ]
-      
-      json_file_names = to_get_json_list[ setdiff( json_file_indexes, r_output_json_file_indexes ) ]
-      
-      last_json_url = paste0( url_creation, json_file_names[ length( json_file_names ) ] )
-      
-      return( last_json_url )
-      
-    })
-    
-    return( company_machine_last_json_url_output )
-    
-  })
+  company_machine_last_json_url = Company_Machine_Last_Json_Url( company_machine_combined_names )
   
   Sensor_Presence_DF( company_machine_last_json_url )
   

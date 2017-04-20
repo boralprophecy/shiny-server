@@ -6,13 +6,13 @@ ui = navbarPage(
   
   theme = 'bootstrap_slate.css',
   
-  title = 'Machine Watchdog',
+  title = 'Watchdog - Lets watch',
   
   #..... Include ui for each tab .....
   
-  source( file.path( "ui", "ui_Sensor_Presence_Information.R" ),  local = T )$value,    #..... ui for graphs tab
+  source( file.path( "ui", "ui_Sensor_Presence_Information.R" ),  local = T )$value,    #..... ui for sensor presence information tab
 
-  source( file.path( "ui", "tab2.R" ),  local = T )$value    #..... ui for tab2
+  source( file.path( "ui", "ui_Gauge_Information.R" ),  local = T )$value    #..... ui for gauge information tab
   
 )
 
@@ -20,9 +20,9 @@ server = function( input, output, session ){
   
   #..... Include server logic for each tab .....
   
-  source( file.path( 'server', 'server_Sensor_Presence_Information.R' ), local = T )$value     #...... server logic for graphs tab
+  source( file.path( 'server', 'server_Sensor_Presence_Information.R' ), local = T )$value     #...... server logic for sensor presence information tab
   
-  source( file.path( 'server', 'tab2.R' ), local = T )$value           #...... server logic for tab2
+  source( file.path( 'server', 'server_Gauge_Information.R' ), local = T )$value           #...... server logic for gauge information tab
   
 }
 
