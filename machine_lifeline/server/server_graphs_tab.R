@@ -1,0 +1,183 @@
+#..... server logic for graphs tab .....
+
+#.......... Analysis ............
+
+if( F ){
+
+company_machine_last_json_url = reactive({ 
+  
+  sapply( Particular_Date_Company_Machine_Names(), function( company_machine_names ){
+    
+    company_machine_last_json_url_output = sapply( company_machine_names, function( current_company_machine_name ){
+      
+      company_machine_info = unlist( strsplit( current_company_machine_name, ';' ) )
+      
+      current_company = company_machine_info[1]  ;  current_machine_name = company_machine_info[2]
+      
+      server_url = 'http://54.162.246.37/log-V2/'
+      
+      date_to_check = Sys.Date() - 1
+      
+      url_creation = paste0( server_url, date_to_check, '/', current_company, '/', current_machine_name, '/' )   #...... url creation
+      
+      to_get_json_list = getHTMLLinks( url_creation )
+      
+      json_file_indexes = grep( '.json', to_get_json_list ) ; r_output_json_file_indexes = grep( '_routput', to_get_json_list )
+      
+      r_output_json_file_names = to_get_json_list[ intersect( json_file_indexes, r_output_json_file_indexes ) ]
+      
+      json_file_names = to_get_json_list[ setdiff( json_file_indexes, r_output_json_file_indexes ) ]
+      
+      last_json_url = paste0( url_creation, json_file_names[ length( json_file_names ) ] )
+      
+      return( last_json_url )
+      
+    })
+    
+    return( company_machine_last_json_url_output )
+    
+  })
+  
+  })
+
+}
+
+output$sensor_presence_data_available_time_dataframe = renderDataTable({
+  
+  iris
+  
+})
+
+if(F){
+output$sensor_presence_data_available_time_dataframe = renderUI({ 
+  
+  company_machine_last_json_url =  sapply( Particular_Date_Company_Machine_Names(), function( company_machine_names ){
+    
+    company_machine_last_json_url_output = sapply( company_machine_names, function( current_company_machine_name ){
+      
+      company_machine_info = unlist( strsplit( current_company_machine_name, ';' ) )
+      
+      current_company = company_machine_info[1]  ;  current_machine_name = company_machine_info[2]
+      
+      server_url = 'http://54.162.246.37/log-V2/'
+      
+      date_to_check = Sys.Date() - 1
+      
+      url_creation = paste0( server_url, date_to_check, '/', current_company, '/', current_machine_name, '/' )   #...... url creation
+      
+      to_get_json_list = getHTMLLinks( url_creation )
+      
+      json_file_indexes = grep( '.json', to_get_json_list ) ; r_output_json_file_indexes = grep( '_routput', to_get_json_list )
+      
+      r_output_json_file_names = to_get_json_list[ intersect( json_file_indexes, r_output_json_file_indexes ) ]
+      
+      json_file_names = to_get_json_list[ setdiff( json_file_indexes, r_output_json_file_indexes ) ]
+      
+      last_json_url = paste0( url_creation, json_file_names[ length( json_file_names ) ] )
+      
+      return( last_json_url )
+      
+    })
+    
+    return( company_machine_last_json_url_output )
+    
+  })
+  
+  ss = Sensor_Presence_Data_Available_Time_Dataframe( company_machine_last_json_url )
+  
+})
+}
+
+if( F ){
+  
+# Anything that calls autoInvalidate will automatically invalidate
+# every 2 seconds.
+autoInvalidate <- reactiveTimer(60000)
+
+observe({
+  # Invalidate and re-execute this reactive expression every time the
+  # timer fires.
+  autoInvalidate()
+  
+  
+  sensor_presence_data_available_time_dataframe = renderUI({ 
+    
+    company_machine_last_json_url =  sapply( Particular_Date_Company_Machine_Names(), function( company_machine_names ){
+      
+      company_machine_last_json_url_output = sapply( company_machine_names, function( current_company_machine_name ){
+        
+        company_machine_info = unlist( strsplit( current_company_machine_name, ';' ) )
+        
+        current_company = company_machine_info[1]  ;  current_machine_name = company_machine_info[2]
+        
+        server_url = 'http://54.162.246.37/log-V2/'
+        
+        date_to_check = Sys.Date() - 1
+        
+        url_creation = paste0( server_url, date_to_check, '/', current_company, '/', current_machine_name, '/' )   #...... url creation
+        
+        to_get_json_list = getHTMLLinks( url_creation )
+        
+        json_file_indexes = grep( '.json', to_get_json_list ) ; r_output_json_file_indexes = grep( '_routput', to_get_json_list )
+        
+        r_output_json_file_names = to_get_json_list[ intersect( json_file_indexes, r_output_json_file_indexes ) ]
+        
+        json_file_names = to_get_json_list[ setdiff( json_file_indexes, r_output_json_file_indexes ) ]
+        
+        last_json_url = paste0( url_creation, json_file_names[ length( json_file_names ) ] )
+        
+        return( last_json_url )
+        
+      })
+      
+      return( company_machine_last_json_url_output )
+      
+    })
+    
+    ss = Sensor_Presence_Data_Available_Time_Dataframe( company_machine_last_json_url )
+    
+  })
+  
+  # Do something each time this is invalidated.
+  # The isolate() makes this observer _not_ get invalidated and re-executed
+  # when input$n changes.
+  print(paste("The value of input$n is", isolate(input$n)))
+})
+
+}
+
+
+
+#..... Json list for selected machine .......
+
+json_list = reactive({
+  
+  Particular_Machine_JSON_List( input$selected_server, input$selected_date, input$selected_company, input$selected_machine )
+  
+})
+
+#..... Null json names .....
+
+null_json_names = reactive({
+  
+  Get_NULL_JSON_Names( json_list )
+  
+})
+
+#..... Non-null json list ......
+
+non_null_json_list = reactive({
+  
+  json_list[ names( json_list )[ !( names( json_list ) %in% null_json_names ) ] ]
+  
+})
+
+#..... Sub Assembly Instances missing json names ....
+
+subassembly_instance_missing_json_names = reactive({
+  
+  Get_Subassembly_Instance_Missing_JSON_Names( non_null_json_list )
+  
+})
+  
+

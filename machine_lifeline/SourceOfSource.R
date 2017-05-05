@@ -1,17 +1,16 @@
 #....... Packages ......
 
-library( twitteR ) ; library( RCurl ) ; library( RJSONIO ) ; library( stringr ) ; library( ggplot2 ) ; library( treemap )
+library( shiny ) ; library( ggplot2 ) ; library( XML ) ; library( RJSONIO ) ; library( dplyr )
 
-library( 'ggthemes' )
+#....... Reading of csv for various information .......
 
-#....... Loading lexicon of positive and negative words (from Neal Caren) .......
-
-lexicon = read.csv( 'lexicon.csv' , stringsAsFactors = F )
+subassembly_message_type = read.csv( 'subassembly_message_type.csv', stringsAsFactors = F )
 
 #....... Scripts defined by us .......
 
-source( 'Twitter_Authentication.R' )       #....... twitter authentication
+source( 'UrlProcessing.R' )     #....... url related functions
 
-source( 'logic_Sentiment_Analysis.R' )     #....... url related functions
+source( 'MachineLifelineMain.R' )
 
+source( 'Additional_Functions.R' )    #..... Additional functions for coloring cells in data frame
 
