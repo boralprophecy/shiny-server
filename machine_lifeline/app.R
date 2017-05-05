@@ -6,19 +6,24 @@ ui = navbarPage(
   
   theme = 'bootstrap_slate.css',
   
-  title = 'Twitter Analytics',
+  title = 'Watchdog',
   
   #..... Include ui for each tab .....
   
-  source( file.path( "ui", "ui_Sentiment_Analysis.R" ),  local = T )$value    #..... ui for sentiment analysis tab
+  source( file.path( "ui", "ui_tab1.R" ),  local = T )$value,    #..... ui for sensor presence information tab
 
+  
+  source( file.path( "ui", "ui_tab2.R" ),  local = T )$value    #..... ui for gauge information tab
+  
 )
 
 server = function( input, output, session ){
   
   #..... Include server logic for each tab .....
   
-  source( file.path( 'server', 'server_Sentiment_Analysis.R' ), local = T )$value     #...... server logic for sentiment analysis tab
+  source( file.path( 'server', 'server_tab1.R' ), local = T )$value     #...... server logic for sensor presence information tab
+  
+  source( file.path( 'server', 'server_tab2.R' ), local = T )$value           #...... server logic for gauge information tab
   
 }
 
