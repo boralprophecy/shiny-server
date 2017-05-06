@@ -1,8 +1,8 @@
-#...... ui for Sensor Presence Information tab .....
+#...... ui for graphs tab .....
 
 tabPanel(
   
-  'Sensor',
+  'Sensor Information',
   
   fluidRow(
     
@@ -25,7 +25,9 @@ tabPanel(
    
     dataTableOutput( 'sensor_presence_data_available_time_dataframe' )
     
-  )
+  ),
+  
+  plotOutput('plot')
   
 )
 

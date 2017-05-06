@@ -12,5 +12,4 @@ source( 'UrlProcessing.R' )     #....... url related functions
 
 source( 'MachineLifelineMain.R' )
 
-source( 'Additional_Functions.R' )    #..... Additional functions for coloring cells in data frame
 
