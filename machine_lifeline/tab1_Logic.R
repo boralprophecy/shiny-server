@@ -1,49 +1,8 @@
-#......... To get particular date company machine names ........
-
-Particular_Date_Company_Machine_Names = function( date_to_check ){
-  
-  server_url = 'http://54.162.246.37/log-V2/'
-  
-  url_creation = paste0( server_url, date_to_check, '/' )   #...... url creation
-  
-  to_get_company_names = getHTMLLinks( url_creation )
-  
-  pre_company_names = to_get_company_names[ grep( '/', to_get_company_names ) ]
-  
-  company_names = pre_company_names[ - grep( '/log', pre_company_names ) ]
-  
-  company_names = gsub( '/', '', company_names )
-  
-  company_name_machine_name_combined = sapply( company_names, function( current_company_name ){
-    
-    url_creation_machine_name_retrieval = paste0( server_url, date_to_check, '/', current_company_name, '/' )   #...... url creation
-    
-    to_get_machine_names = getHTMLLinks( url_creation_machine_name_retrieval )
-    
-    pre_machine_names = to_get_machine_names[ grep( '/', to_get_machine_names ) ]
-    
-    machine_names = pre_machine_names[ - grep( '/log',pre_machine_names ) ]
-    
-    machine_names = gsub( '/', '', machine_names )
-    
-    company_name_machine_name_combined_output = machine_names
-    
-    company_name_machine_name_combined_output_with_company = paste0( current_company_name, ';', machine_names )
-    
-    return( company_name_machine_name_combined_output_with_company )
-    
-  })
-  
-  return( company_name_machine_name_combined )
-  
-}
-
-
 #......... To get sensor presence and last time data came for each company-machine combination
 
 Sensor_Presence_DF = function( company_machine_last_json_url ){
   
-  zz = sapply( company_machine_last_json_url, function( current_company_machine_last_json_url ){
+  collectors_subassembly_instance = sapply( company_machine_last_json_url, function( current_company_machine_last_json_url ){
     
     yy = sapply( current_company_machine_last_json_url, function( current_json_url ){
       
@@ -81,9 +40,9 @@ Sensor_Presence_DF = function( company_machine_last_json_url ){
   
   j = 1 ; df_output = list() ; current_company_output = list() ; rownames_final_current_company_output = NULL
   
-  for( j in 1:length( zz ) ){
+  for( j in 1:length( collectors_subassembly_instance ) ){
     
-    current_company_subassembly_instance_sensors_present = zz[[j]]
+    current_company_subassembly_instance_sensors_present = collectors_subassembly_instance[[j]]
     
     company_machine_names = names( current_company_subassembly_instance_sensors_present )
     
@@ -188,45 +147,31 @@ Sensor_Presence_DF = function( company_machine_last_json_url ){
 }
 
 
-#......... Reading JSON file from server ...........
 
-Read_JSON_From_Server = function( current_json_url ){
-  
-  tryCatch( {
-    
-    current_json = suppressWarnings( lapply( readLines( current_json_url, n=1L ), fromJSON ) )[[1]]     #............ JSON input of data
-    
-  }, error = function( cond ){    #.... In case of error in first time, another attempt will be made for reading the json ........
-    
-    tryCatch( {   #.... In case of error in second time, another attempt will be made for reading the json ........
-      
-      current_json = suppressWarnings( lapply( readLines( current_json_url, n=1L ), fromJSON ) )[[1]]     #............ JSON input of data
-      
-    }, error = function( cond ){
-      
-      tryCatch( { 
-        
-        current_json = suppressWarnings( lapply( readLines( current_json_url, n=1L ), fromJSON ) )[[1]]     #............ JSON input of data
-        
-      }, error = function( cond ){  #.... In case of error in third time, another attempt will be made for reading the json ........
-        
-        tryCatch( {
-          
-          current_json = suppressWarnings( lapply( readLines( current_json_url, n=1L ), fromJSON ) )[[1]]     #............ JSON input of data
-          
-        }, error = function( cond ){   #.... In case of error in fourth time, another attempt will be made for reading the json ........
-          
-          current_json = suppressWarnings( lapply( readLines( current_json_url, n=1L ), fromJSON ) )[[1]]     #............ JSON input of data
-          
-        } )
-        
-      } )
-      
-    } )
-    
-  } )
-  
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
